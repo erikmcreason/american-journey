@@ -152,3 +152,60 @@ Return
 =
 
 Long-term success and retention
+
+# Motivation Layer
+
+Each stage should preview future opportunities and benefits available in later stages.
+
+The platform should create anticipation and curiosity by allowing users to see what can be unlocked through continued progress.
+
+Examples:
+
+* Future lessons
+* Advanced tracks
+* Certifications
+* Career resources
+* Community opportunities
+* Mentor access
+
+The objective is to reinforce engagement through visible future rewards while maintaining meaningful educational outcomes.
+
+---
+
+## Stage Preview Examples
+
+### Arrival
+
+Preview:
+
+Learn how Americans build credit, buy homes, start businesses, and create financial stability.
+
+---
+
+### Foundation
+
+Preview:
+
+Unlock career development, networking, workplace culture, and professional advancement.
+
+---
+
+### Opportunity
+
+Preview:
+
+Unlock advanced citizenship preparation, civic participation, leadership opportunities, and community impact.
+
+---
+
+### Citizenship
+
+Preview:
+
+Unlock mentorship opportunities, community leadership, and legacy-building pathways.
+
+---
+
+### Legacy
+
+Become a mentor and help guide future participants through their own American Journey.
