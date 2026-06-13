@@ -49,7 +49,34 @@ Key Elements:
 
 ---
 
-### Screen 4: Dashboard
+### Screen 4: Journey Map
+
+Purpose:
+
+Provide users with a visual representation of their progression through The American Journey.
+
+Key Elements:
+
+- Current Stage
+- Completed Stages
+- Locked Stages
+- Future Unlocks
+- Milestones
+- Rewards
+- Recommended Path
+
+Journey Stages:
+
+- Arrival
+- Foundation
+- Opportunity
+- Integration
+- Citizenship
+- Legacy
+- 
+---
+
+### Screen 5: Dashboard
 
 Purpose:
 
@@ -65,7 +92,7 @@ Key Elements:
 
 ---
 
-### Screen 5: Track Detail
+### Screen 6: Track Detail
 
 Purpose:
 
@@ -80,7 +107,7 @@ Key Elements:
 
 ---
 
-### Screen 6: Lesson Screen
+### Screen 7: Lesson Screen
 
 Purpose:
 
@@ -95,7 +122,7 @@ Key Elements:
 
 ---
 
-### Screen 7: Assessment Screen
+### Screen 8: Assessment Screen
 
 Purpose:
 
@@ -109,7 +136,7 @@ Key Elements:
 
 ---
 
-### Screen 8: Profile
+### Screen 9: Profile
 
 Purpose:
 
