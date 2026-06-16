@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const stages = [
   { name: "Arrival", status: "Completed", progress: 100 },
   { name: "Foundation", status: "In Progress", progress: 45 },
@@ -16,9 +18,10 @@ export default function DashboardPage() {
 
       <div className="grid gap-4">
         {stages.map((stage) => (
-          <div
+          <Link
             key={stage.name}
-            className="bg-slate-800 rounded-xl p-6"
+            href={`/journey/${stage.name.toLowerCase()}`}
+            className="bg-slate-800 rounded-xl p-6 block hover:bg-slate-700 transition"
           >
             <div className="flex justify-between items-center mb-3">
               <h2 className="text-2xl font-semibold">
@@ -40,7 +43,7 @@ export default function DashboardPage() {
             <p className="text-slate-300 mt-2">
               {stage.progress}% complete
             </p>
-          </div>
+          </Link>
         ))}
       </div>
     </main>
