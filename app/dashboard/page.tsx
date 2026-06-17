@@ -1,15 +1,60 @@
-import Link from "next/link";
+"use client";
 
-const stages = [
-  { name: "Arrival", status: "Completed", progress: 100 },
-  { name: "Foundation", status: "In Progress", progress: 45 },
-  { name: "Work", status: "Not Started", progress: 0 },
-  { name: "Citizenship", status: "Not Started", progress: 0 },
-  { name: "Leadership", status: "Not Started", progress: 0 },
-  { name: "Legacy", status: "Not Started", progress: 0 },
-];
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { stageData } from "@/app/data/stages";
 
 export default function DashboardPage() {
+  const [progressData, setProgressData] = useState<
+    {
+      name: string;
+      progress: number;
+      status: string;
+      completedTasks: number;
+      totalTasks: number;
+    }[]
+  >([]);
+
+  useEffect(() => {
+    const stages = Object.keys(stageData).map((stageKey) => {
+      const stage = stageData[stageKey];
+
+      const storageKey = `american-journey-${stageKey}`;
+
+      const savedTasks = localStorage.getItem(storageKey);
+
+      const completedTasks = savedTasks
+        ? JSON.parse(savedTasks).length
+        : 0;
+
+      const totalTasks = stage.tasks.length;
+
+      const progress = Math.round(
+        (completedTasks / totalTasks) * 100
+      );
+
+      let status = "Not Started";
+
+      if (progress > 0) {
+        status = "In Progress";
+      }
+
+      if (progress === 100) {
+        status = "Completed";
+      }
+
+      return {
+        name: stage.title,
+        progress,
+        status,
+        completedTasks,
+        totalTasks,
+      };
+    });
+
+    setProgressData(stages);
+  }, []);
+
   return (
     <main className="min-h-screen bg-slate-900 text-white p-8">
       <h1 className="text-5xl font-bold mb-8">
@@ -17,7 +62,7 @@ export default function DashboardPage() {
       </h1>
 
       <div className="grid gap-4">
-        {stages.map((stage) => (
+        {progressData.map((stage) => (
           <Link
             key={stage.name}
             href={`/journey/${stage.name.toLowerCase()}`}
@@ -42,6 +87,10 @@ export default function DashboardPage() {
 
             <p className="text-slate-300 mt-2">
               {stage.progress}% complete
+            </p>
+
+            <p className="text-slate-400 text-sm mt-1">
+              {stage.completedTasks} / {stage.totalTasks} Tasks Complete
             </p>
           </Link>
         ))}
