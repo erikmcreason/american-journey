@@ -6,9 +6,18 @@ import { stageData } from "@/app/data/stages";
 
 export default function JourneyPage() {
   const [stages, setStages] = useState<any[]>([]);
+  const [overallProgress, setOverallProgress] =
+    useState(0);
+  const [completedTasksCount, setCompletedTasksCount] =
+    useState(0);
+  const [totalTasksCount, setTotalTasksCount] =
+    useState(0);
 
   useEffect(() => {
     const stageKeys = Object.keys(stageData);
+
+    let totalCompleted = 0;
+    let totalTasks = 0;
 
     const calculatedStages = stageKeys.map(
       (stageKey, index) => {
@@ -21,6 +30,9 @@ export default function JourneyPage() {
         const completedTasks = savedTasks
           ? JSON.parse(savedTasks).length
           : 0;
+
+        totalCompleted += completedTasks;
+        totalTasks += stage.tasks.length;
 
         const progress = Math.round(
           (completedTasks / stage.tasks.length) * 100
@@ -65,6 +77,14 @@ export default function JourneyPage() {
       }
     );
 
+    const overall = Math.round(
+      (totalCompleted / totalTasks) * 100
+    );
+
+    setOverallProgress(overall);
+    setCompletedTasksCount(totalCompleted);
+    setTotalTasksCount(totalTasks);
+
     setStages(calculatedStages);
   }, []);
 
@@ -73,6 +93,31 @@ export default function JourneyPage() {
       <h1 className="text-5xl font-bold mb-10 text-center">
         The American Journey
       </h1>
+
+      <div className="max-w-4xl mx-auto mb-10">
+        <div className="bg-slate-800 rounded-xl p-6">
+          <h2 className="text-2xl font-bold mb-4">
+            Overall Journey Progress
+          </h2>
+
+          <div className="w-full bg-slate-700 rounded-full h-4">
+            <div
+              className="bg-green-500 h-4 rounded-full"
+              style={{
+                width: `${overallProgress}%`,
+              }}
+            />
+          </div>
+
+          <p className="mt-3 text-lg">
+            {overallProgress}% Complete
+          </p>
+
+          <p className="text-slate-400">
+            {completedTasksCount} / {totalTasksCount} Total Tasks Completed
+          </p>
+        </div>
+      </div>
 
       <div className="max-w-4xl mx-auto space-y-6">
         {stages.map((stage) => {
@@ -107,9 +152,22 @@ export default function JourneyPage() {
 
               {!stage.unlocked && (
                 <p className="text-yellow-400 text-sm mt-2">
-                  Locked
+                  🔒 Locked
                 </p>
               )}
+
+              {stage.progress === 100 && (
+                <p className="text-green-400 text-sm mt-2">
+                  ✅ Completed
+                </p>
+              )}
+
+              {stage.progress > 0 &&
+                stage.progress < 100 && (
+                  <p className="text-yellow-300 text-sm mt-2">
+                    ⚡ In Progress
+                  </p>
+                )}
             </div>
           );
 
