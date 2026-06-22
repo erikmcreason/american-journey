@@ -8,35 +8,63 @@ The American Journey
 
 ## Product Vision
 
-The American Journey exists to help immigrants successfully navigate immigration, integration, citizenship preparation, and long-term success in America.
+The American Journey exists to help people build successful, prosperous, and meaningful lives in America.
 
-The platform combines education, guidance, cultural integration, administrative readiness, financial literacy, and community support into a single structured journey.
+The platform improves economic mobility, social mobility, integration, self-awareness, leadership, and long-term contribution through a structured journey of growth and achievement.
 
-Our vision is to create the most trusted pathway for immigrants seeking to thrive in America while preserving and celebrating the strengths of their cultural heritage.
+Education is a mechanism.
+
+Success is the outcome.
+
+The long-term vision is to create the most trusted platform for helping individuals navigate opportunity, build trust capital, contribute to their communities, and pursue their version of the American Dream.
+
+---
+
+## Core Product Thesis
+
+The American Journey is not primarily an educational platform.
+
+It is a success platform.
+
+The platform helps users improve:
+
+* Economic mobility
+* Social mobility
+* Trust capital
+* Career readiness
+* Financial capability
+* Community participation
+* Leadership capacity
+* Long-term contribution
+
+Lessons, tools, assessments, and guidance exist to support these outcomes.
 
 ---
 
 ## Problem Statement
 
-Immigrants often struggle throughout the immigration and integration process because the path is confusing, fragmented, expensive, and difficult to navigate.
+Many people struggle to achieve long-term success because the systems that influence opportunity are fragmented, confusing, and difficult to navigate.
 
-Challenges include:
+Challenges may include:
 
-- Language barriers
-- Administrative complexity
-- Paperwork management
-- Citizenship preparation
-- Financial literacy
-- Cultural adaptation
-- Employment readiness
-- Legal compliance
+* Career uncertainty
+* Employment readiness
+* Financial literacy
+* Credit building
+* Housing stability
+* Professional development
+* Community integration
+* Civic understanding
+* Leadership development
+* Social mobility
 
-Many immigrants lack access to a centralized system that helps them understand:
+Most people lack a structured roadmap that helps them understand:
 
-- What to do
-- When to do it
-- Why it matters
-- What risks they face if they miss important steps
+* What opportunities exist
+* What actions matter most
+* What skills to develop
+* How to progress toward their goals
+* How to build a stable and prosperous future
 
 ---
 
@@ -44,95 +72,143 @@ Many immigrants lack access to a centralized system that helps them understand:
 
 ### Primary Users
 
-- Future immigrants
-- Legal immigrants
-- Permanent residents
-- Green card applicants
-- Refugees
-- Asylum seekers
-- International students
+Individuals seeking to improve their lives in America through greater opportunity, stability, contribution, and success.
+
+Potential examples include:
+
+* New Americans
+* Immigrants
+* Students
+* Young professionals
+* Career changers
+* Aspiring entrepreneurs
+* Individuals pursuing personal growth
 
 ### Secondary Users
 
-- Families supporting immigrants
-- Community organizations
-- Employers
-- Nonprofit organizations
-- Educational institutions
+* Families
+* Community organizations
+* Educational institutions
+* Employers
+* Workforce development programs
+* Nonprofit organizations
 
 ---
 
-## User Personas
+## Core Journey
 
-Reference:
+### Arrival
 
-- User-Personas.md
+Orientation and onboarding.
 
-Primary Personas:
+### Foundation
 
-- Maria
-- Ahmed
-- Julia
-- Carlos
+Understanding the system and building core habits.
 
----
+### Work
 
-## User Journey
+Developing economic value and career readiness.
 
-Reference:
+### Citizenship
 
-- User-Journey-Map.md
+Participating in community and civic life.
 
-Journey Stages:
+### Leadership
 
-1. Arrival
-2. Foundation
-3. Opportunity
-4. Integration
-5. Citizenship
-6. Legacy
+Influence, responsibility, and contribution.
+
+### Legacy
+
+Long-term impact, mentorship, and generational contribution.
 
 ---
 
-## Core Product Tracks
+## Success Paths
 
-### English & Communication
+The platform should support multiple definitions of success.
 
-Purpose:
+Examples include:
 
-Help users improve English proficiency and communication skills.
+### Stability Path
+
+* Employment
+* Credit
+* Housing
+* Family stability
+
+### Career Path
+
+* Education
+* Certifications
+* Career advancement
+
+### Entrepreneurship Path
+
+* Business ownership
+* Sales
+* Marketing
+* Operations
+
+### Investor Path
+
+* Wealth building
+* Investing
+* Financial independence
+
+### Community Leadership Path
+
+* Civic engagement
+* Volunteerism
+* Public service
+* Community impact
+
+Users may stop at a path that satisfies their goals or continue into additional paths.
 
 ---
 
-### Financial Literacy & Opportunity
+## Core Product Areas
 
-Purpose:
+### Self Discovery
 
-Help users understand banking, credit, budgeting, home ownership, entrepreneurship, and economic opportunity.
+* Personality assessments
+* Values assessments
+* Strengths assessments
+* Career assessments
 
----
+### Economic Mobility
 
-### Citizenship Readiness
+* Career development
+* Resume creation
+* Interview preparation
+* Professional development
 
-Purpose:
+### Financial Capability
 
-Prepare users for citizenship requirements, civics knowledge, and citizenship testing.
+* Banking
+* Credit
+* Budgeting
+* Taxes
+* Wealth building
 
----
+### Social Mobility
 
-### Administrative Readiness
+* Networking
+* Communication
+* Professional relationships
+* Community participation
 
-Purpose:
+### Citizenship & Civic Understanding
 
-Help users manage paperwork, deadlines, documentation, government notices, and avoid scams.
+* Institutions
+* Responsibilities
+* Community engagement
 
----
+### Leadership Development
 
-### Cultural Integration & Community
-
-Purpose:
-
-Help users integrate into American society while preserving and celebrating their cultural heritage.
+* Accountability
+* Communication
+* Decision making
+* Service
 
 ---
 
@@ -140,90 +216,119 @@ Help users integrate into American society while preserving and celebrating thei
 
 ### User Accounts
 
-- Registration
-- Login
-- User Profiles
+* Registration
+* Login
+* User Profiles
 
 ### Dashboard
 
-- Progress tracking
-- Readiness score
-- Recommended next actions
+* Progress Tracking
+* Current Mission
+* Recommended Next Actions
 
-### Learning Modules
+### Journey System
 
-- Lessons
-- Quizzes
-- Progress tracking
+* Stages
+* Tasks
+* Progress Tracking
+* Stage Unlocking
 
-### Achievement System
+### Progress Persistence
 
-- Badges
-- Milestones
-- Completion tracking
+* User-specific progress
+* Supabase synchronization
 
 ---
 
-## Out of Scope (Future Releases)
+## Future Features
 
-- AI Coach
-- Mentor Network
-- Employer Portal
-- Government Partnerships
-- Certification Program
-- Community Forums
-- Legal Services Integration
-- Mobile Application
+### Assessments
+
+* MBTI
+* Big Five
+* DISC
+* Values Assessments
+* Strengths Assessments
+
+### Career Tools
+
+* Resume Builder
+* Career Matching
+* Interview Preparation
+
+### Financial Tools
+
+* Budgeting Tools
+* Credit Simulators
+* Savings Planning
+
+### Gamification
+
+* XP System
+* Badges
+* Achievements
+
+### AI Systems
+
+* AI Guidance
+* Personalized Recommendations
+* Adaptive Success Paths
 
 ---
 
 ## Success Metrics
 
-### User Engagement
+Success should be measured by outcomes rather than content consumption.
 
-- Account creation
-- Active users
-- Returning users
+Examples:
 
-### Educational Outcomes
+### Economic Outcomes
 
-- Track completion rates
-- Quiz completion rates
-- Readiness score improvement
+* Employment
+* Income growth
+* Career advancement
 
-### User Satisfaction
+### Financial Outcomes
 
-- Feedback scores
-- Feature requests
-- Retention rates
+* Credit improvement
+* Savings growth
+* Housing stability
+
+### Social Outcomes
+
+* Community participation
+* Network growth
+* Leadership activity
+
+### Platform Outcomes
+
+* User retention
+* User engagement
+* Journey completion
 
 ---
 
-## Risks
+## Product Decision Filter
 
-### Product Risks
+Future features should be evaluated using:
 
-- Scope creep
-- Feature overload
-- Low user adoption
+1. Does this improve economic mobility?
+2. Does this improve social mobility?
+3. Does this improve trust capital?
+4. Does this improve integration?
+5. Does this improve self-awareness?
+6. Does this improve long-term success?
+7. Does this improve contribution?
+8. Does this produce measurable outcomes?
 
-### Operational Risks
-
-- Content accuracy
-- Regulatory changes
-- Immigration policy changes
+Features satisfying multiple criteria should generally receive higher priority.
 
 ---
 
 ## Long-Term Vision
 
-The American Journey evolves from an educational platform into a comprehensive integration ecosystem that supports immigrants throughout their journey toward citizenship, economic success, community involvement, and long-term contribution to American society.
+The American Journey becomes a platform that helps people navigate opportunity, build capability, increase contribution, and create long-term success.
 
-Potential future capabilities include:
+The objective is not content completion.
 
-- AI-guided learning
-- Citizenship certification
-- Employer partnerships
-- Mentor networks
-- Government-supported programs
-- Community engagement initiatives
+The objective is transformation.

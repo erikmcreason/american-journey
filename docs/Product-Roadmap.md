@@ -2,15 +2,21 @@
 
 ## Product North Star
 
-The American Journey combines language education, financial literacy, administrative readiness, citizenship preparation, and cultural integration into a single guided pathway that helps immigrants successfully navigate the journey toward opportunity, contribution, and long-term success in America.
+The American Journey helps people build successful, prosperous, and meaningful lives in America.
+
+The platform improves economic mobility, social mobility, trust capital, integration, leadership, and long-term contribution through structured guidance, practical tools, assessments, and personalized success paths.
+
+Education is a mechanism.
+
+Success is the outcome.
 
 ---
 
-# Phase 1: MVP (Prove Value)
+# Phase 1: Progression Engine MVP
 
 ## Goal
 
-Validate that users find value in a structured platform that helps them navigate immigration, integration, and citizenship readiness.
+Prove that users find value in a structured journey that helps them progress toward meaningful life outcomes.
 
 ## Core Features
 
@@ -22,144 +28,229 @@ Validate that users find value in a structured platform that helps them navigate
 
 ### Dashboard
 
-* Progress tracking
-* Readiness score
-* Recommended next actions
+* Overall Progress
+* Current Mission
+* Resume Journey
+* Recommended Next Actions
 
-### Core Tracks
+### Journey System
 
-#### English & Communication
-
-#### Financial Literacy & Opportunity
-
-#### Citizenship Readiness
-
-#### Administrative Readiness
-
-#### Cultural Integration & Community
-
-### Progress System
-
-* Progress bars
-* Track completion
-* Milestones
-* Badges
-
-### Assessments
-
-* Basic quizzes
-* Readiness scoring
-
-## Success Criteria
-
-* Users complete at least one track.
-* Users return to continue learning.
-* Users report increased confidence.
-* Users understand their next steps.
-
----
-
-# Phase 2: Guided Journey
-
-## Goal
-
-Increase engagement and personalization.
-
-## Features
-
-### Personalized Journey Map
-
-* Custom pathway
-* Recommended actions
-* Milestone tracking
-
-### Readiness Engine
-
-* Integration readiness
-* Citizenship readiness
-* Financial readiness
-
-### Progress Reports
-
-* Monthly reports
-* Achievement summaries
-
-## Success Criteria
-
-Users actively follow personalized recommendations and progress through multiple tracks.
-
----
-
-# Phase 3: AI Guide
-
-## Goal
-
-Provide individualized guidance and coaching.
-
-## Features
-
-### AI Coach
-
-* Immigration guidance
-* Learning support
-* Progress recommendations
-
-### AI English Tutor
-
-* Conversation practice
-* Pronunciation support
-
-### AI Citizenship Tutor
-
-* Test preparation
-* Interview preparation
-
-### Memory OS Learning Engine
-
-* Spaced repetition
-* Recall reinforcement
-* Accelerated learning
-
-## Success Criteria
-
-Users demonstrate improved retention, engagement, and educational outcomes.
-
----
-
-# Phase 4: Certification Platform
-
-## Goal
-
-Create measurable achievement and credibility.
-
-## Features
-
-### Readiness Certifications
-
+* Arrival
 * Foundation
-* Opportunity
-* Integration
+* Work
 * Citizenship
-
-### Achievement Levels
-
-* Bronze
-* Silver
-* Gold
+* Leadership
 * Legacy
 
-### Progress Verification
+### Progress Engine
 
-* Completion records
-* Readiness scores
+* Task Completion
+* Progress Tracking
+* Stage Unlocking
+* Persistence
+
+### Documentation Foundation
+
+* Master Map
+* Product Strategy
+* Roadmap
+* Decision Log
 
 ## Success Criteria
 
-Users complete certifications and demonstrate measurable progress.
+* Users complete stages
+* Users return to continue progress
+* Progress persists correctly
+* Users understand what to do next
 
 ---
 
-# Phase 5: Community Ecosystem
+# Phase 2: Success Paths
+
+## Goal
+
+Allow users to pursue different definitions of success.
+
+## Features
+
+### Stability Path
+
+* Employment
+* Credit
+* Housing
+* Family Stability
+
+### Career Path
+
+* Education
+* Certifications
+* Career Advancement
+
+### Entrepreneurship Path
+
+* Business Ownership
+* Sales
+* Marketing
+* Operations
+
+### Investor Path
+
+* Wealth Building
+* Investing
+* Financial Independence
+
+### Community Leadership Path
+
+* Civic Engagement
+* Volunteerism
+* Public Service
+
+## Success Criteria
+
+Users can choose and follow personalized paths aligned with their goals.
+
+---
+
+# Phase 3: Self Discovery & Assessment
+
+## Goal
+
+Increase self-awareness and improve decision-making.
+
+## Features
+
+### Personality Assessments
+
+* MBTI
+* Big Five
+* DISC
+
+### Strengths Assessments
+
+* Strength Discovery
+* Aptitude Discovery
+
+### Values Assessments
+
+* Core Values
+* Mission Development
+
+### Career Assessments
+
+* Career Matching
+* Opportunity Recommendations
+
+## Success Criteria
+
+Users gain insight into strengths, preferences, and potential opportunities.
+
+---
+
+# Phase 4: Practical Success Tools
+
+## Goal
+
+Provide useful tools that help users take action.
+
+## Features
+
+### Career Tools
+
+* Resume Builder
+* Interview Preparation
+* Career Matching
+
+### Financial Tools
+
+* Budget Planning
+* Credit Simulators
+* Savings Planning
+
+### Planning Tools
+
+* Goal Planning
+* Life Planning
+* Success Planning
+
+### Relationship Tools
+
+* Communication Analysis
+* Personality Comparison
+* Conflict Resolution
+
+## Success Criteria
+
+Users actively use platform tools to improve real-world outcomes.
+
+---
+
+# Phase 5: Trust Capital & Leadership
+
+## Goal
+
+Help users build influence, reputation, contribution, and leadership capacity.
+
+## Features
+
+### Trust Capital System
+
+* Accountability Tracking
+* Commitments
+* Reputation Development
+
+### Leadership Development
+
+* Communication
+* Responsibility
+* Decision Making
+* Service
+
+### Community Participation
+
+* Volunteer Opportunities
+* Community Challenges
+* Civic Engagement
+
+## Success Criteria
+
+Users demonstrate increased leadership activity and community participation.
+
+---
+
+# Phase 6: Intelligence Layer
+
+## Goal
+
+Provide adaptive guidance and personalized recommendations.
+
+## Features
+
+### AI Guidance
+
+* Goal Coaching
+* Journey Recommendations
+* Opportunity Discovery
+
+### Personalized Success Engine
+
+* Adaptive Success Paths
+* Personalized Missions
+* Dynamic Recommendations
+
+### Opportunity Matching
+
+* Careers
+* Education
+* Community Programs
+* Mentorship Opportunities
+
+## Success Criteria
+
+Users receive increasingly personalized guidance and achieve higher success rates.
+
+---
+
+# Phase 7: Community Ecosystem
 
 ## Goal
 
@@ -169,53 +260,74 @@ Build a scalable support network.
 
 ### Mentor Network
 
-* Volunteer mentors
-* Community support
+* Volunteer Mentors
+* Community Leaders
 
 ### Employer Partnerships
 
-* Workforce readiness
-* Employment pathways
+* Workforce Development
+* Hiring Pathways
 
 ### Community Organizations
 
 * Nonprofits
 * Churches
-* Educational institutions
+* Educational Institutions
 
-### Cultural Showcase
+### Success Stories
 
-* Food
-* Traditions
-* Celebrations
-* Success stories
+* Community Recognition
+* User Spotlights
+* Legacy Stories
 
 ## Success Criteria
 
-Users gain meaningful community connections and support.
+Users develop meaningful relationships and support networks.
 
 ---
 
-# Phase 6: American Journey Institute
+# Phase 8: American Journey Institute
 
 ## Goal
 
-Establish a nationally recognized integration framework.
+Establish a nationally recognized success and mobility framework.
 
 ## Features
-
-### Nonprofit Foundation
 
 ### Research Programs
 
 ### Grant Programs
 
-### Government Partnerships
+### Workforce Partnerships
 
 ### Educational Partnerships
 
-### National Certification Standards
+### Economic Mobility Initiatives
+
+### Community Development Initiatives
+
+### National Success Framework
 
 ## Success Criteria
 
-The American Journey becomes a trusted platform supporting immigrant success, integration, and citizenship readiness at scale.
+The American Journey becomes a trusted platform supporting economic mobility, social mobility, trust capital, leadership development, and long-term success at scale.
+
+---
+
+# Roadmap Principles
+
+The roadmap should always prioritize:
+
+1. Economic Mobility
+2. Social Mobility
+3. Trust Capital
+4. Integration
+5. Self-Awareness
+6. Leadership
+7. Long-Term Contribution
+
+Future features should be evaluated based on measurable outcomes rather than content consumption.
+
+The objective is not lesson completion.
+
+The objective is transformation.
