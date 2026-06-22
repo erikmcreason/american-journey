@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { stageData } from "@/app/data/stages";
+import { isStageUnlocked } from "@/app/lib/unlockRules";
 import { supabase } from "@/app/lib/supabase";
 
 export default function StagePage() {
@@ -26,95 +27,30 @@ export default function StagePage() {
       ? stageKeys[currentIndex + 1]
       : null;
 
-  const [userId, setUserId] = useState<string | null>(null);
-  const [authChecked, setAuthChecked] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
+  const unlocked = isStageUnlocked(stage);
+
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
 
   useEffect(() => {
-    async function loadStageProgress() {
-      setAuthChecked(false);
-      setCompletedTasks([]);
-
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        setUserId(null);
-        setUnlocked(false);
-        setAuthChecked(true);
-        return;
-      }
-
-      setUserId(user.id);
-
-      if (!currentStage) {
-        setUnlocked(false);
-        setAuthChecked(true);
-        return;
-      }
-
-      if (currentIndex === 0) {
-        setUnlocked(true);
-      } else if (previousStage) {
-        const { data: previousData, error: previousError } =
-          await supabase
-            .from("user_progress")
-            .select("*")
-            .eq("user_id", user.id)
-            .eq("stage_key", previousStage)
-            .eq("completed", true);
-
-        if (previousError) {
-          console.error(previousError);
-          setUnlocked(false);
-          setAuthChecked(true);
-          return;
-        }
-
-        const previousTaskNames = Array.from(
-          new Set(
-            previousData?.map((item) => item.task_name) || []
-          )
-        ).filter((task) =>
-          stageData[previousStage].tasks.includes(task)
-        );
-
-        const previousProgress =
-          previousTaskNames.length ===
-          stageData[previousStage].tasks.length;
-
-        setUnlocked(previousProgress);
-
-        if (!previousProgress) {
-          setAuthChecked(true);
-          return;
-        }
-      }
-
+    async function loadCompletedTasks() {
       const { data, error } = await supabase
         .from("user_progress")
         .select("*")
-        .eq("user_id", user.id)
         .eq("stage_key", stage)
         .eq("completed", true);
 
       if (error) {
         console.error(error);
-        setAuthChecked(true);
         return;
       }
 
-      const taskNames = Array.from(
-        new Set(data?.map((item) => item.task_name) || [])
-      ).filter((task) => currentStage.tasks.includes(task));
+      const taskNames =
+        data?.map((item) => item.task_name) || [];
 
       setCompletedTasks(taskNames);
-      setAuthChecked(true);
     }
 
-    loadStageProgress();
+    loadCompletedTasks();
   }, [stage]);
 
   if (!currentStage) {
@@ -127,37 +63,6 @@ export default function StagePage() {
     );
   }
 
-  if (!authChecked) {
-    return (
-      <main className="min-h-screen bg-slate-900 text-white p-8">
-        <h1 className="text-4xl font-bold">
-          Loading Stage...
-        </h1>
-      </main>
-    );
-  }
-
-  if (!userId) {
-    return (
-      <main className="min-h-screen bg-slate-900 text-white p-8">
-        <h1 className="text-5xl font-bold mb-6">
-          Login Required
-        </h1>
-
-        <p className="mb-6">
-          Sign in before accessing your journey progress.
-        </p>
-
-        <Link
-          href="/login"
-          className="bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded-lg"
-        >
-          Go to Login
-        </Link>
-      </main>
-    );
-  }
-
   if (!unlocked) {
     return (
       <main className="min-h-screen bg-slate-900 text-white p-8">
@@ -166,7 +71,8 @@ export default function StagePage() {
         </h1>
 
         <p className="mb-6">
-          Complete the previous stage before accessing this section.
+          Complete the previous stage before
+          accessing this section.
         </p>
 
         <Link
@@ -180,10 +86,6 @@ export default function StagePage() {
   }
 
   async function toggleTask(task: string) {
-    if (!userId) {
-      return;
-    }
-
     const alreadyCompleted =
       completedTasks.includes(task);
 
@@ -191,7 +93,6 @@ export default function StagePage() {
       const { error } = await supabase
         .from("user_progress")
         .delete()
-        .eq("user_id", userId)
         .eq("stage_key", stage)
         .eq("task_name", task);
 
@@ -208,7 +109,6 @@ export default function StagePage() {
         .from("user_progress")
         .insert([
           {
-            user_id: userId,
             stage_key: stage,
             task_name: task,
             completed: true,
@@ -303,14 +203,16 @@ export default function StagePage() {
         </div>
 
         <div>
-          {nextStage && progressPercent === 100 && (
-            <Link
-              href={`/journey/${nextStage}`}
-              className="bg-green-700 hover:bg-green-600 px-4 py-2 rounded-lg"
-            >
-              {stageData[nextStage].title} →
-            </Link>
-          )}
+          {nextStage &&
+            progressPercent === 100 &&
+            isStageUnlocked(nextStage) && (
+              <Link
+                href={`/journey/${nextStage}`}
+                className="bg-green-700 hover:bg-green-600 px-4 py-2 rounded-lg"
+              >
+                {stageData[nextStage].title} →
+              </Link>
+            )}
         </div>
       </div>
     </main>

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { stageData } from "@/app/data/stages";
-import { supabase } from "@/app/lib/supabase";
 
 export default function JourneyPage() {
   const [stages, setStages] = useState<any[]>([]);
@@ -13,128 +12,81 @@ export default function JourneyPage() {
     useState(0);
   const [totalTasksCount, setTotalTasksCount] =
     useState(0);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function loadJourney() {
-      setLoading(true);
+    const stageKeys = Object.keys(stageData);
 
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+    let totalCompleted = 0;
+    let totalTasks = 0;
 
-      if (!user) {
-        setLoading(false);
-        return;
-      }
+    const calculatedStages = stageKeys.map(
+      (stageKey, index) => {
+        const stage = stageData[stageKey];
 
-      const stageKeys = Object.keys(stageData);
+        const savedTasks = localStorage.getItem(
+          `american-journey-${stageKey}`
+        );
 
-      const { data: progressData, error } =
-        await supabase
-          .from("user_progress")
-          .select("*")
-          .eq("user_id", user.id);
+        const completedTasks = savedTasks
+          ? JSON.parse(savedTasks).length
+          : 0;
 
-      if (error) {
-        console.error(error);
-        setLoading(false);
-        return;
-      }
+        totalCompleted += completedTasks;
+        totalTasks += stage.tasks.length;
 
-      let totalCompleted = 0;
-      let totalTasks = 0;
+        const progress = Math.round(
+          (completedTasks / stage.tasks.length) * 100
+        );
 
-      const calculatedStages = stageKeys.map(
-        (stageKey, index) => {
-          const stage = stageData[stageKey];
+        let unlocked = false;
 
-          const uniqueTasks = Array.from(
-            new Set(
-              progressData
-                ?.filter(
-                  (item) =>
-                    item.stage_key === stageKey
-                )
-                .map((item) => item.task_name) || []
-            )
-          );
+        if (index === 0) {
+          unlocked = true;
+        } else {
+          const previousKey =
+            stageKeys[index - 1];
 
-          const completedTasks =
-            uniqueTasks.length;
+          const previousTasks =
+            localStorage.getItem(
+              `american-journey-${previousKey}`
+            );
 
-          totalCompleted += completedTasks;
-          totalTasks += stage.tasks.length;
+          const previousCompleted =
+            previousTasks
+              ? JSON.parse(previousTasks).length
+              : 0;
 
-          const progress = Math.round(
-            (completedTasks /
-              stage.tasks.length) *
-              100
-          );
+          const previousProgress =
+            Math.round(
+              (previousCompleted /
+                stageData[previousKey].tasks.length) *
+                100
+            );
 
-          let unlocked = false;
-
-          if (index === 0) {
-            unlocked = true;
-          } else {
-            const previousKey =
-              stageKeys[index - 1];
-
-            const previousUniqueTasks =
-              Array.from(
-                new Set(
-                  progressData
-                    ?.filter(
-                      (item) =>
-                        item.stage_key ===
-                        previousKey
-                    )
-                    .map(
-                      (item) =>
-                        item.task_name
-                    ) || []
-                )
-              );
-
-            unlocked =
-              previousUniqueTasks.length ===
-              stageData[previousKey].tasks.length;
-          }
-
-          return {
-            key: stageKey,
-            title: stage.title,
-            description: stage.description,
-            progress,
-            unlocked,
-          };
+          unlocked =
+            previousProgress === 100;
         }
-      );
 
-      const overall = Math.round(
-        (totalCompleted / totalTasks) * 100
-      );
-
-      setOverallProgress(overall);
-      setCompletedTasksCount(totalCompleted);
-      setTotalTasksCount(totalTasks);
-      setStages(calculatedStages);
-
-      setLoading(false);
-    }
-
-    loadJourney();
-  }, []);
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-slate-900 text-white p-10">
-        <h1 className="text-4xl font-bold">
-          Loading Journey...
-        </h1>
-      </main>
+        return {
+          key: stageKey,
+          title: stage.title,
+          description: stage.description,
+          progress,
+          unlocked,
+        };
+      }
     );
-  }
+
+    const overall = Math.round(
+      (totalCompleted / totalTasks) * 100
+    );
+
+    setOverallProgress(overall);
+    setCompletedTasksCount(totalCompleted);
+    setTotalTasksCount(totalTasks);
+
+    setStages(calculatedStages);
+  }, []);
 
   return (
     <main className="min-h-screen bg-slate-900 text-white p-10">
@@ -162,9 +114,7 @@ export default function JourneyPage() {
           </p>
 
           <p className="text-slate-400">
-            {completedTasksCount} /{" "}
-            {totalTasksCount} Total Tasks
-            Completed
+            {completedTasksCount} / {totalTasksCount} Total Tasks Completed
           </p>
         </div>
       </div>

@@ -3,77 +3,135 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { stageData } from "@/app/data/stages";
+import { supabase } from "@/app/lib/supabase";
 
 export default function DashboardPage() {
-  const [progressData, setProgressData] = useState<
-    {
-      name: string;
-      progress: number;
-      status: string;
-      completedTasks: number;
-      totalTasks: number;
-      unlocked: boolean;
-    }[]
-  >([]);
+  const [progressData, setProgressData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const stageKeys = Object.keys(stageData);
+    async function loadDashboard() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
-    const stages = stageKeys.map((stageKey) => {
-      const stage = stageData[stageKey];
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
-      const storageKey = `american-journey-${stageKey}`;
+      const { data: progressRows, error } =
+        await supabase
+          .from("user_progress")
+          .select("*")
+          .eq("user_id", user.id);
 
-      const savedTasks = localStorage.getItem(storageKey);
+      if (error) {
+        console.error(error);
+        setLoading(false);
+        return;
+      }
 
-      const completedTasks = savedTasks
-        ? JSON.parse(savedTasks).length
-        : 0;
+      const stageKeys = Object.keys(stageData);
 
-      const totalTasks = stage.tasks.length;
+      let totalCompleted = 0;
+      let totalTasks = 0;
 
-      const progress = Math.round(
-        (completedTasks / totalTasks) * 100
+      const stages = stageKeys.map((stageKey) => {
+        const stage = stageData[stageKey];
+
+        const completedTasks = Array.from(
+          new Set(
+            progressRows
+              ?.filter(
+                (row) =>
+                  row.stage_key === stageKey &&
+                  row.completed
+              )
+              .map((row) => row.task_name) || []
+          )
+        ).length;
+
+        totalCompleted += completedTasks;
+        totalTasks += stage.tasks.length;
+
+        const progress = Math.round(
+          (completedTasks / stage.tasks.length) * 100
+        );
+
+        let status = "Not Started";
+
+        if (progress > 0) {
+          status = "In Progress";
+        }
+
+        if (progress === 100) {
+          status = "Completed";
+        }
+
+        return {
+          key: stageKey,
+          name: stage.title,
+          description: stage.description,
+          progress,
+          status,
+          completedTasks,
+          totalTasks: stage.tasks.length,
+        };
+      });
+
+      const stagesWithUnlocks = stages.map(
+        (stage, index) => {
+          if (index === 0) {
+            return {
+              ...stage,
+              unlocked: true,
+            };
+          }
+
+          const previousStage =
+            stages[index - 1];
+
+          return {
+            ...stage,
+            unlocked:
+              previousStage.progress === 100,
+          };
+        }
       );
 
-      let status = "Not Started";
+      const overallProgress = Math.round(
+        (totalCompleted / totalTasks) * 100
+      );
 
-      if (progress > 0) {
-        status = "In Progress";
-      }
+      setProgressData([
+        {
+          overallProgress,
+          totalCompleted,
+          totalTasks,
+          isSummary: true,
+        },
+        ...stagesWithUnlocks,
+      ]);
 
-      if (progress === 100) {
-        status = "Completed";
-      }
+      setLoading(false);
+    }
 
-      return {
-        key: stageKey,
-        name: stage.title,
-        progress,
-        status,
-        completedTasks,
-        totalTasks,
-      };
-    });
-
-    const stagesWithUnlocks = stages.map((stage, index) => {
-      if (index === 0) {
-        return {
-          ...stage,
-          unlocked: true,
-        };
-      }
-
-      const previousStage = stages[index - 1];
-
-      return {
-        ...stage,
-        unlocked: previousStage.progress === 100,
-      };
-    });
-
-    setProgressData(stagesWithUnlocks);
+    loadDashboard();
   }, []);
+
+  if (loading) {
+    return (
+      <main className="min-h-screen bg-slate-900 text-white p-8">
+        <h1 className="text-4xl font-bold">
+          Loading Dashboard...
+        </h1>
+      </main>
+    );
+  }
+
+  const summary = progressData[0];
+  const stages = progressData.slice(1);
 
   return (
     <main className="min-h-screen bg-slate-900 text-white p-8">
@@ -81,8 +139,32 @@ export default function DashboardPage() {
         American Journey Dashboard
       </h1>
 
+      <div className="bg-slate-800 rounded-xl p-6 mb-8">
+        <h2 className="text-2xl font-bold mb-4">
+          Overall Progress
+        </h2>
+
+        <div className="w-full bg-slate-700 rounded-full h-4">
+          <div
+            className="bg-green-500 h-4 rounded-full"
+            style={{
+              width: `${summary?.overallProgress || 0}%`,
+            }}
+          />
+        </div>
+
+        <p className="mt-3">
+          {summary?.overallProgress || 0}% Complete
+        </p>
+
+        <p className="text-slate-400">
+          {summary?.totalCompleted || 0} /{" "}
+          {summary?.totalTasks || 0} Tasks Completed
+        </p>
+      </div>
+
       <div className="grid gap-4">
-        {progressData.map((stage) => {
+        {stages.map((stage: any) => {
           const card = (
             <div
               className={`rounded-xl p-6 transition ${
@@ -113,26 +195,20 @@ export default function DashboardPage() {
               </div>
 
               <p className="text-slate-300 mt-2">
-                {stage.progress}% complete
+                {stage.progress}% Complete
               </p>
 
               <p className="text-slate-400 text-sm mt-1">
                 {stage.completedTasks} / {stage.totalTasks} Tasks Complete
               </p>
-
-              {!stage.unlocked && (
-                <p className="text-yellow-400 text-sm mt-3">
-                  Complete the previous stage to unlock.
-                </p>
-              )}
             </div>
           );
 
           if (stage.unlocked) {
             return (
               <Link
-                key={stage.name}
-                href={`/journey/${stage.name.toLowerCase()}`}
+                key={stage.key}
+                href={`/journey/${stage.key}`}
               >
                 {card}
               </Link>
@@ -140,7 +216,7 @@ export default function DashboardPage() {
           }
 
           return (
-            <div key={stage.name}>
+            <div key={stage.key}>
               {card}
             </div>
           );
