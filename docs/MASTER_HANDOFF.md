@@ -4,11 +4,158 @@
 
 This document is the authoritative onboarding and operating guide for future development sessions.
 
-A new developer, AI assistant, or future project contributor should read this document first before making recommendations or code changes.
+A new developer, AI assistant, or future project contributor should read this document before making recommendations or code changes.
 
 MASTER_MAP.md defines the vision.
 
 MASTER_HANDOFF.md defines how development operates.
+
+CURRENT_STATE.md defines what is happening right now.
+
+---
+
+# REQUIRED HANDOFF PACKAGE
+
+Future development sessions should begin by providing the following documents.
+
+These documents collectively represent the authoritative project knowledge base.
+
+# SESSION STARTUP CHECKLIST
+
+Before making recommendations:
+
+1. Read HANDOFF_PROMPT.md
+
+2. Read all documents listed in the Required Handoff Package.
+
+3. Summarize:
+
+   * Current Project State
+   * Current Sprint
+   * Current Objective
+   * Known-Good Baseline
+   * Current Open Issues
+   * Next Development Target
+
+4. Wait for confirmation.
+
+No code recommendations should occur before this process is completed.
+
+
+## Required Documents
+
+1. HANDOFF_PROMPT.md
+
+Purpose:
+Instructions for future AI assistants.
+
+---
+
+2. MASTER_HANDOFF.md
+
+Purpose:
+Project operating system, workflow, engineering rules, GitHub process, and development standards.
+
+---
+
+3. CURRENT_STATE.md
+
+Purpose:
+Current sprint, current objective, current open issues, current project state, and next development target.
+
+---
+
+4. MASTER_MAP.md
+
+Purpose:
+Project vision, product vision, success paths, strategic frameworks, and long-term direction.
+
+---
+
+5. PRODUCT_STRATEGY.md
+
+Purpose:
+Product decision framework and strategic priorities.
+
+---
+
+6. DECISIONS.md
+
+Purpose:
+Historical decision log and preserved reasoning.
+
+---
+
+7. Product-Roadmap.md
+
+Purpose:
+Planned development phases and future product evolution.
+
+---
+
+8. Product-Architecture.md
+
+Purpose:
+Product structure, systems, layers, and feature organization.
+
+---
+
+9. PRD.md
+
+Purpose:
+Product requirements and functional expectations.
+
+---
+
+10. Vision.md
+
+Purpose:
+Foundational vision statement and long-term mission.
+
+---
+
+# HANDOFF PROCEDURE
+
+For a new development session:
+
+Step 1:
+Provide the Required Handoff Package documents.
+
+Step 2:
+Instruct the AI to read all documents before making recommendations.
+
+Step 3:
+Require the AI to summarize:
+
+1. Current Project State
+2. Current Sprint
+3. Current Objective
+4. Known-Good Baseline
+5. Current Open Issues
+6. Next Development Target
+
+Step 4:
+Require confirmation before code changes begin.
+
+No coding recommendations should occur until this summary has been completed and confirmed.
+
+---
+
+# AUTHORITATIVE DOCUMENT ORDER
+
+When conflicts occur, precedence is:
+
+1. MASTER_MAP.md
+2. MASTER_HANDOFF.md
+3. CURRENT_STATE.md
+4. PRODUCT_STRATEGY.md
+5. DECISIONS.md
+6. Product-Roadmap.md
+7. Product-Architecture.md
+8. PRD.md
+9. Vision.md
+
+Higher documents override lower documents.
 
 ---
 
@@ -224,9 +371,37 @@ Supabase operational.
 
 ---
 
-# CURRENT VERIFIED ROUTES
+# CURRENT TECHNICAL BASELINE
 
-Verified:
+## Framework
+
+Next.js App Router
+
+## Language
+
+TypeScript
+
+## UI
+
+React
+
+Tailwind CSS
+
+## Backend
+
+Supabase
+
+## Authentication
+
+Supabase Auth
+
+## Database
+
+PostgreSQL
+
+---
+
+## Verified Routes
 
 /dashboard
 
@@ -240,38 +415,9 @@ Verified:
 
 /test-auth
 
-Additional stage routes are expected to exist but should be verified against the file structure.
-
 ---
 
-# CURRENT TECH STACK
-
-Frontend:
-
-* Next.js App Router
-* React
-* TypeScript
-* Tailwind CSS
-
-Backend:
-
-* Supabase
-
-Authentication:
-
-* Supabase Auth
-
-Database:
-
-* PostgreSQL
-
-Environment:
-
-localhost:3000
-
----
-
-# CURRENT KNOWN-GOOD FILES
+## Known-Good Baseline Files
 
 app/dashboard/page.tsx
 
@@ -284,6 +430,7 @@ app/data/stages.ts
 app/lib/supabase.ts
 
 Development should begin from verified known-good baselines whenever possible.
+
 
 ---
 
@@ -439,6 +586,8 @@ One feature at a time.
 
 Avoid multi-feature implementation.
 
+Administrative work may happen in parallel if it does not alter application code.
+
 ---
 
 ## Rule 4
@@ -496,22 +645,6 @@ Facts and theories must remain separate.
 7. Assuming project structure.
 
 8. Debugging multiple theories simultaneously.
-
----
-
-# DOCUMENT HIERARCHY
-
-The following documents should be treated as authoritative.
-
-1. MASTER_MAP.md
-2. MASTER_HANDOFF.md
-3. PRODUCT_STRATEGY.md
-4. Product-Roadmap.md
-5. Product-Architecture.md
-6. PRD.md
-7. Vision.md
-
-When conflicts occur, higher documents take precedence.
 
 ---
 
