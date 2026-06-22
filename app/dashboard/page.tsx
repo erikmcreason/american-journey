@@ -9,6 +9,9 @@ export default function DashboardPage() {
   const [progressData, setProgressData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [currentMission, setCurrentMission] =
+    useState<any>(null);
+
   useEffect(() => {
     async function loadDashboard() {
       const {
@@ -40,7 +43,7 @@ export default function DashboardPage() {
       const stages = stageKeys.map((stageKey) => {
         const stage = stageData[stageKey];
 
-        const completedTasks = Array.from(
+        const completedTaskNames = Array.from(
           new Set(
             progressRows
               ?.filter(
@@ -50,7 +53,10 @@ export default function DashboardPage() {
               )
               .map((row) => row.task_name) || []
           )
-        ).length;
+        );
+
+        const completedTasks =
+          completedTaskNames.length;
 
         totalCompleted += completedTasks;
         totalTasks += stage.tasks.length;
@@ -76,6 +82,7 @@ export default function DashboardPage() {
           progress,
           status,
           completedTasks,
+          completedTaskNames,
           totalTasks: stage.tasks.length,
         };
       });
@@ -99,6 +106,34 @@ export default function DashboardPage() {
           };
         }
       );
+
+      const missionStage =
+        stagesWithUnlocks.find(
+          (stage) =>
+            stage.unlocked &&
+            stage.progress < 100
+        );
+
+      if (missionStage) {
+        const stage =
+          stageData[missionStage.key];
+
+        const nextTask =
+          stage.tasks.find(
+            (task) =>
+              !missionStage.completedTaskNames.includes(
+                task
+              )
+          ) || null;
+
+        setCurrentMission({
+          stageKey: missionStage.key,
+          title: missionStage.name,
+          description:
+            missionStage.description,
+          nextTask,
+        });
+      }
 
       const overallProgress = Math.round(
         (totalCompleted / totalTasks) * 100
@@ -138,6 +173,39 @@ export default function DashboardPage() {
       <h1 className="text-5xl font-bold mb-8">
         American Journey Dashboard
       </h1>
+
+      {currentMission && (
+        <div className="bg-blue-900 rounded-xl p-6 mb-8 border border-blue-700">
+          <h2 className="text-2xl font-bold mb-4">
+            Current Mission
+          </h2>
+
+          <h3 className="text-xl font-semibold mb-2">
+            {currentMission.title}
+          </h3>
+
+          <p className="text-slate-200 mb-4">
+            {currentMission.description}
+          </p>
+
+          <div className="bg-slate-800 rounded-lg p-4 mb-4">
+            <p className="text-sm text-slate-400 mb-1">
+              Next Task
+            </p>
+
+            <p className="font-semibold">
+              {currentMission.nextTask}
+            </p>
+          </div>
+
+          <Link
+            href={`/journey/${currentMission.stageKey}`}
+            className="inline-block bg-green-700 hover:bg-green-600 px-4 py-2 rounded-lg"
+          >
+            Resume Journey →
+          </Link>
+        </div>
+      )}
 
       <div className="bg-slate-800 rounded-xl p-6 mb-8">
         <h2 className="text-2xl font-bold mb-4">
@@ -199,7 +267,8 @@ export default function DashboardPage() {
               </p>
 
               <p className="text-slate-400 text-sm mt-1">
-                {stage.completedTasks} / {stage.totalTasks} Tasks Complete
+                {stage.completedTasks} /{" "}
+                {stage.totalTasks} Tasks Complete
               </p>
             </div>
           );
