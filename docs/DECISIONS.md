@@ -287,6 +287,29 @@ Issue
 
 This reduces scope drift and preserves project continuity.
 
+Decision 013
+Task-Level Architecture
+
+Status:
+Accepted
+
+Reason:
+
+Tasks are not merely completion checkboxes.
+
+Tasks are future destinations capable of supporting:
+
+- Lessons
+- Assessments
+- Downloads
+- AI Guidance
+- XP
+- Badges
+- Personalized Success Paths
+
+The platform will therefore treat tasks as first-class entities with dedicated routes and content rather than simple string-based checklist items.
+
+
 ### Date
 
 2026

@@ -2,8 +2,39 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { stageData } from "@/app/data/stages";
+import { stageData, Task } from "@/app/data/stages";
 import { supabase } from "@/app/lib/supabase";
+
+function sentenceCase(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
+
+function getTaskKeys(task: Task) {
+  return Array.from(
+    new Set([
+      task.id,
+      task.title,
+      task.title.toLowerCase(),
+      sentenceCase(task.title),
+    ])
+  );
+}
+
+function getCompletedTaskIds(
+  rows: any[] | null | undefined,
+  tasks: Task[]
+) {
+  const completedRows =
+    rows?.filter((row) => row.completed) || [];
+
+  return tasks
+    .filter((task) =>
+      completedRows.some((row) =>
+        getTaskKeys(task).includes(row.task_name)
+      )
+    )
+    .map((task) => task.id);
+}
 
 export default function DashboardPage() {
   const [progressData, setProgressData] = useState<any[]>([]);
@@ -43,27 +74,21 @@ export default function DashboardPage() {
       const stages = stageKeys.map((stageKey) => {
         const stage = stageData[stageKey];
 
-        const completedTaskNames = Array.from(
-          new Set(
-            progressRows
-              ?.filter(
-                (row) =>
-                  row.stage_key === stageKey &&
-                  row.completed
-              )
-              .map((row) => row.task_name) || []
-          )
-        );
+        const completedTaskIds =
+          getCompletedTaskIds(progressRows, stage.tasks);
 
         const completedTasks =
-          completedTaskNames.length;
+          completedTaskIds.length;
 
         totalCompleted += completedTasks;
         totalTasks += stage.tasks.length;
 
-        const progress = Math.round(
-          (completedTasks / stage.tasks.length) * 100
-        );
+        const progress =
+          stage.tasks.length > 0
+            ? Math.round(
+                (completedTasks / stage.tasks.length) * 100
+              )
+            : 0;
 
         let status = "Not Started";
 
@@ -82,7 +107,7 @@ export default function DashboardPage() {
           progress,
           status,
           completedTasks,
-          completedTaskNames,
+          completedTaskIds,
           totalTasks: stage.tasks.length,
         };
       });
@@ -121,8 +146,8 @@ export default function DashboardPage() {
         const nextTask =
           stage.tasks.find(
             (task) =>
-              !missionStage.completedTaskNames.includes(
-                task
+              !missionStage.completedTaskIds.includes(
+                task.id
               )
           ) || null;
 
@@ -133,11 +158,16 @@ export default function DashboardPage() {
             missionStage.description,
           nextTask,
         });
+      } else {
+        setCurrentMission(null);
       }
 
-      const overallProgress = Math.round(
-        (totalCompleted / totalTasks) * 100
-      );
+      const overallProgress =
+        totalTasks > 0
+          ? Math.round(
+              (totalCompleted / totalTasks) * 100
+            )
+          : 0;
 
       setProgressData([
         {
@@ -174,7 +204,7 @@ export default function DashboardPage() {
         American Journey Dashboard
       </h1>
 
-      {currentMission && (
+      {currentMission && currentMission.nextTask && (
         <div className="bg-blue-900 rounded-xl p-6 mb-8 border border-blue-700">
           <h2 className="text-2xl font-bold mb-4">
             Current Mission
@@ -194,12 +224,16 @@ export default function DashboardPage() {
             </p>
 
             <p className="font-semibold">
-              {currentMission.nextTask}
+              {currentMission.nextTask.title}
+            </p>
+
+            <p className="text-slate-400 text-sm mt-1">
+              {currentMission.nextTask.description}
             </p>
           </div>
 
           <Link
-            href={`/journey/${currentMission.stageKey}`}
+            href={`/journey/${currentMission.stageKey}/${currentMission.nextTask.id}`}
             className="inline-block bg-green-700 hover:bg-green-600 px-4 py-2 rounded-lg"
           >
             Resume Journey →

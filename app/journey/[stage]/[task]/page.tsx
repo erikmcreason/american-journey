@@ -1,25 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { stageData, Task } from "@/app/data/stages";
 import { supabase } from "@/app/lib/supabase";
-
-function sentenceCase(value: string) {
-  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
-}
-
-function getTaskKeys(task: Task) {
-  return Array.from(
-    new Set([
-      task.id,
-      task.title,
-      task.title.toLowerCase(),
-      sentenceCase(task.title),
-    ])
-  );
-}
 
 function getCompletedTaskIds(
   rows: any[] | null | undefined,
@@ -30,31 +15,30 @@ function getCompletedTaskIds(
 
   return tasks
     .filter((task) =>
-      completedRows.some((row) =>
-        getTaskKeys(task).includes(row.task_name)
+      completedRows.some(
+        (row) => row.task_name === task.id
       )
     )
     .map((task) => task.id);
 }
 
-export default function StagePage() {
+export default function TaskPage() {
   const params = useParams();
   const stage = params.stage as string;
+  const task = params.task as string;
 
   const currentStage = stageData[stage];
+  const currentTask =
+    currentStage?.tasks.find(
+      (stageTask) => stageTask.id === task
+    ) || null;
 
   const stageKeys = Object.keys(stageData);
-
   const currentIndex = stageKeys.indexOf(stage);
 
   const previousStage =
     currentIndex > 0
       ? stageKeys[currentIndex - 1]
-      : null;
-
-  const nextStage =
-    currentIndex < stageKeys.length - 1
-      ? stageKeys[currentIndex + 1]
       : null;
 
   const [userId, setUserId] = useState<string | null>(null);
@@ -63,7 +47,7 @@ export default function StagePage() {
   const [completedTasks, setCompletedTasks] = useState<string[]>([]);
 
   useEffect(() => {
-    async function loadStageProgress() {
+    async function loadTaskProgress() {
       setAuthChecked(false);
       setCompletedTasks([]);
 
@@ -80,7 +64,7 @@ export default function StagePage() {
 
       setUserId(user.id);
 
-      if (!currentStage) {
+      if (!currentStage || !currentTask) {
         setUnlocked(false);
         setAuthChecked(true);
         return;
@@ -142,15 +126,22 @@ export default function StagePage() {
       setAuthChecked(true);
     }
 
-    loadStageProgress();
-  }, [stage]);
+    loadTaskProgress();
+  }, [stage, task]);
 
-  if (!currentStage) {
+  if (!currentStage || !currentTask) {
     return (
       <main className="min-h-screen bg-slate-900 text-white p-8">
         <h1 className="text-4xl font-bold">
-          Stage Not Found
+          Task Not Found
         </h1>
+
+        <Link
+          href="/journey"
+          className="text-blue-300 underline block mt-6"
+        >
+          Return to Journey
+        </Link>
       </main>
     );
   }
@@ -159,7 +150,7 @@ export default function StagePage() {
     return (
       <main className="min-h-screen bg-slate-900 text-white p-8">
         <h1 className="text-4xl font-bold">
-          Loading Stage...
+          Loading Task...
         </h1>
       </main>
     );
@@ -194,7 +185,7 @@ export default function StagePage() {
         </h1>
 
         <p className="mb-6">
-          Complete the previous stage before accessing this section.
+          Complete the previous stage before accessing this task.
         </p>
 
         <Link
@@ -207,13 +198,13 @@ export default function StagePage() {
     );
   }
 
-  async function toggleTask(task: Task) {
-    if (!userId) {
+  async function toggleTaskCompletion() {
+    if (!userId || !currentTask) {
       return;
     }
 
     const alreadyCompleted =
-      completedTasks.includes(task.id);
+      completedTasks.includes(currentTask.id);
 
     if (alreadyCompleted) {
       const { error } = await supabase
@@ -221,7 +212,7 @@ export default function StagePage() {
         .delete()
         .eq("user_id", userId)
         .eq("stage_key", stage)
-        .in("task_name", getTaskKeys(task));
+        .eq("task_name", currentTask.id);
 
       if (error) {
         console.error(error);
@@ -229,7 +220,9 @@ export default function StagePage() {
       }
 
       setCompletedTasks(
-        completedTasks.filter((taskId) => taskId !== task.id)
+        completedTasks.filter(
+          (taskId) => taskId !== currentTask.id
+        )
       );
     } else {
       const { error } = await supabase
@@ -238,7 +231,7 @@ export default function StagePage() {
           {
             user_id: userId,
             stage_key: stage,
-            task_name: task.id,
+            task_name: currentTask.id,
             completed: true,
           },
         ]);
@@ -248,121 +241,153 @@ export default function StagePage() {
         return;
       }
 
-      setCompletedTasks([...completedTasks, task.id]);
+      setCompletedTasks([
+        ...completedTasks,
+        currentTask.id,
+      ]);
     }
   }
 
-  const progressPercent =
-    currentStage.tasks.length > 0
-      ? Math.round(
-          (completedTasks.length / currentStage.tasks.length) * 100
-        )
-      : 0;
+  const currentTaskIndex =
+    currentStage.tasks.findIndex(
+      (stageTask) => stageTask.id === currentTask.id
+    );
+
+  const previousTask =
+    currentTaskIndex > 0
+      ? currentStage.tasks[currentTaskIndex - 1]
+      : null;
+
+  const nextTask =
+    currentTaskIndex < currentStage.tasks.length - 1
+      ? currentStage.tasks[currentTaskIndex + 1]
+      : null;
+
+  const completed =
+    completedTasks.includes(currentTask.id);
 
   return (
     <main className="min-h-screen bg-slate-900 text-white p-8">
       <Link
-        href="/journey"
+        href={`/journey/${stage}`}
         className="text-blue-300 underline"
       >
-        Back to Journey
+        Back to {currentStage.title}
       </Link>
 
-      <h1 className="text-5xl font-bold mt-8 mb-4">
-        {currentStage.title}
-      </h1>
+      <div className="mt-8 bg-slate-800 rounded-xl p-6 mb-6">
+        <p className="text-slate-400 mb-2">
+          {currentStage.title}
+        </p>
 
-      <div className="bg-slate-800 rounded-xl p-6 mb-6">
-        <h2 className="text-2xl font-semibold mb-3">
-          Overview
-        </h2>
+        <h1 className="text-5xl font-bold mb-4">
+          {currentTask.title}
+        </h1>
 
-        <p>{currentStage.description}</p>
-      </div>
+        <p className="text-slate-300 mb-4">
+          {currentTask.description}
+        </p>
 
-      <div className="bg-slate-800 rounded-xl p-6 mb-6">
-        <h2 className="text-2xl font-semibold mb-3">
-          Progress
-        </h2>
+        <div className="grid gap-3 md:grid-cols-3 mb-6">
+          <div className="bg-slate-900 rounded-lg p-4">
+            <p className="text-slate-400 text-sm">
+              Estimated Time
+            </p>
+            <p className="font-semibold">
+              {currentTask.estimatedMinutes} minutes
+            </p>
+          </div>
 
-        <div className="w-full bg-slate-700 rounded-full h-4">
-          <div
-            className="bg-green-500 h-4 rounded-full"
-            style={{ width: `${progressPercent}%` }}
-          />
+          <div className="bg-slate-900 rounded-lg p-4">
+            <p className="text-slate-400 text-sm">
+              Readiness Category
+            </p>
+            <p className="font-semibold">
+              {currentTask.readinessCategory}
+            </p>
+          </div>
+
+          <div className="bg-slate-900 rounded-lg p-4">
+            <p className="text-slate-400 text-sm">
+              Readiness Points
+            </p>
+            <p className="font-semibold">
+              +{currentTask.readinessPoints}
+            </p>
+          </div>
         </div>
 
-        <p className="mt-3">
-          {progressPercent}% Complete
-        </p>
-      </div>
+        <div className="bg-slate-900 rounded-lg p-4 mb-6">
+          <h2 className="text-2xl font-semibold mb-3">
+            Task Content
+          </h2>
 
-      <div className="bg-slate-800 rounded-xl p-6 mb-6">
-        <h2 className="text-2xl font-semibold mb-3">
-          Tasks
-        </h2>
+          <p className="text-slate-300">
+            {currentTask.content ||
+              "Task content will be added here as the curriculum expands."}
+          </p>
+        </div>
 
-        <ul className="space-y-3">
-          {currentStage.tasks.map((task) => {
-            const completed =
-              completedTasks.includes(task.id);
+        <div className="bg-slate-900 rounded-lg p-4 mb-6">
+          <h2 className="text-2xl font-semibold mb-3">
+            Resources
+          </h2>
 
-            return (
-              <li
-                key={task.id}
-                className="bg-slate-900 rounded-lg p-4"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <Link
-                      href={`/journey/${stage}/${task.id}`}
-                      className="text-lg font-semibold hover:text-blue-300"
-                    >
-                      {completed ? "☑" : "☐"} {task.title}
-                    </Link>
+          {currentTask.resources.length > 0 ? (
+            <ul className="list-disc pl-6 text-slate-300">
+              {currentTask.resources.map((resource) => (
+                <li key={resource}>{resource}</li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-slate-300">
+              No resources added yet.
+            </p>
+          )}
+        </div>
 
-                    <p className="text-slate-400 text-sm mt-1">
-                      {task.description}
-                    </p>
+        <div className="bg-slate-900 rounded-lg p-4 mb-6">
+          <h2 className="text-2xl font-semibold mb-3">
+            Assessment
+          </h2>
 
-                    <p className="text-slate-500 text-sm mt-2">
-                      {task.estimatedMinutes} minutes ·{" "}
-                      {task.readinessCategory} +{task.readinessPoints}
-                    </p>
-                  </div>
+          <p className="text-slate-300">
+            {currentTask.assessment ||
+              "No assessment attached to this task yet."}
+          </p>
+        </div>
 
-                  <button
-                    onClick={() => toggleTask(task)}
-                    className="bg-slate-700 hover:bg-slate-600 px-3 py-2 rounded-lg text-sm whitespace-nowrap"
-                  >
-                    {completed ? "Mark Incomplete" : "Complete"}
-                  </button>
-                </div>
-              </li>
-            );
-          })}
-        </ul>
+        <button
+          onClick={toggleTaskCompletion}
+          className={`px-5 py-3 rounded-lg ${
+            completed
+              ? "bg-slate-700 hover:bg-slate-600"
+              : "bg-green-700 hover:bg-green-600"
+          }`}
+        >
+          {completed ? "Mark Task Incomplete" : "Complete Task"}
+        </button>
       </div>
 
       <div className="flex justify-between mt-8">
         <div>
-          {previousStage && (
+          {previousTask && (
             <Link
-              href={`/journey/${previousStage}`}
+              href={`/journey/${stage}/${previousTask.id}`}
               className="bg-slate-700 hover:bg-slate-600 px-4 py-2 rounded-lg"
             >
-              ← {stageData[previousStage].title}
+              ← {previousTask.title}
             </Link>
           )}
         </div>
 
         <div>
-          {nextStage && progressPercent === 100 && (
+          {nextTask && (
             <Link
-              href={`/journey/${nextStage}`}
+              href={`/journey/${stage}/${nextTask.id}`}
               className="bg-green-700 hover:bg-green-600 px-4 py-2 rounded-lg"
             >
-              {stageData[nextStage].title} →
+              {nextTask.title} →
             </Link>
           )}
         </div>
