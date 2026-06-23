@@ -1,2 +1,2 @@
 # american-journey
-A product roadmap and MVP build for an immigrant integration, citizenship readiness, and cultural assimilation platform.
+A guided success platform for newcomers building their version of the American Dream.
